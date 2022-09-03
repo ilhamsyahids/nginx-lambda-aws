@@ -15,7 +15,8 @@ RUN chmod +x /usr/bin/lambda_rie
 RUN sed -i "s/listen       80/listen       9186/g" /etc/nginx/conf.d/default.conf
 
 # move the nginx pid file to a directory that can be written 
-RUN sed -i "s,pid        /var/run/nginx.pid;,pid        /tmp/nginx.pid;,g" /etc/nginx/nginx.conf
+# RUN sed -i "s,pid        /var/run/nginx.pid;,pid        /tmp/nginx.pid;,g" /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # put the nginx logs to stdout and stderr (which also avoids writing to non writable folders)
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
