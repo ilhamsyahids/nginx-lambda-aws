@@ -11,8 +11,8 @@ RUN chmod +x /usr/bin/lambda_rie
 ########## start of custom tweaks - NGINX specific ############ 
 ###############################################################
 
-# make nginx listin on 8090
-RUN sed -i "s/listen       80/listen       8090/g" /etc/nginx/conf.d/default.conf
+# make nginx listin on 9186
+RUN sed -i "s/listen       80/listen       9186/g" /etc/nginx/conf.d/default.conf
 
 # move the nginx pid file to a directory that can be written 
 RUN sed -i "s,pid        /var/run/nginx.pid;,pid        /tmp/nginx.pid;,g" /etc/nginx/nginx.conf
@@ -24,15 +24,15 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 # redirect all cache files to /tmp (writable)
 COPY cachepaths.conf /etc/nginx/conf.d/cachepaths.conf
 
-COPY index.html /usr/share/nginx/html/index.html
-
 ###############################################################
 ########### end of custom tweaks - NGINX specific ############# 
 ###############################################################
 
+COPY index.html /usr/share/nginx/html/index.html
+
 # reweb environment variables
 ENV REWEB_APPLICATION_EXEC nginx
-ENV REWEB_APPLICATION_PORT 8090
+ENV REWEB_APPLICATION_PORT 9186
 ENV REWEB_WAIT_CODE 200
 
 ENTRYPOINT ["/reweb"]

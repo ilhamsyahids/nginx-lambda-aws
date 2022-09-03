@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Running the PHP + NGINX image as a Lambda function
+
+Parameters:
+  ImageUri:
+    Type: String
+    Description: "ECR image uri"
+
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      MemorySize: 1024
+      PackageType: Image
+      ImageUri: !Ref ImageUri
+      Timeout: 30
+      AutoPublishAlias: live
+      Events:
+        Proxy:
+          Type: HttpApi
+          Properties:
+            Method: ANY
+            Path: /{proxy+}
+            TimeoutInMillis: 29000
+
+Outputs:
+  Function:
+    Value: !Ref Function.Version
+  Url:
+    Value: !GetAtt ServerlessHttpApi.ApiEndpoint
